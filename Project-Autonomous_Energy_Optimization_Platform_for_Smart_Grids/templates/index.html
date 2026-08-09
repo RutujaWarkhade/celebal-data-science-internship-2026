@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autonomous Energy Optimization Platform for Smart Grids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- ============================= SIDEBAR ============================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar__brand">
+    <span class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="currentColor"/></svg>
+    </span>
+    <div>
+      <div class="brand-mark">AEOP</div>
+      <div class="brand-sub">Autonomous Energy Optimization Platform for Smart Grids</div>
+    </div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <a href="#overview" class="nav-link is-active" data-section="overview">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Overview
+    </a>
+    <a href="#forecast" class="nav-link" data-section="forecast">
+      <svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg>
+      Forecast
+    </a>
+    <a href="#patterns" class="nav-link" data-section="patterns">
+      <svg viewBox="0 0 24 24"><path d="M3 12c2-5 4 5 6 0s4-5 6 0 4-5 6 0"/></svg>
+      Usage Patterns
+    </a>
+    <a href="#segments" class="nav-link" data-section="segments">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 4"/></svg>
+      Household Segments
+    </a>
+    <a href="#insights" class="nav-link" data-section="insights">
+      <svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg>
+      Optimization Insights
+    </a>
+  </nav>
+
+  <div class="sidebar__footer">
+    <button class="model-details-toggle" id="modelDetailsToggle" type="button">
+      <span class="pulse-dot" id="statusDot"></span>
+      Model details
+    </button>
+  </div>
+</aside>
+
+<div class="mobile-topbar">
+  <span class="brand-mark">AEOP</span>
+  <button id="mobileMenuBtn" aria-label="Menu">
+    <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+</div>
+
+<!-- ============================= MAIN ============================= -->
+<main class="main">
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="section hero-section" id="overview">
+    <p class="eyebrow">London Smart Meter Panel · 3.5M Household-Days</p>
+    <h1 class="hero-title">Yesterday told us a lot.<br>This model tells us <em>tomorrow</em>.</h1>
+    <p class="hero-sub">AI-powered energy forecasting and analytics for smarter, more efficient energy management.</p>
+    <div class="hero-cta">
+      <a href="#forecast" class="btn btn--primary">See tomorrow's forecast</a>
+      <a href="#forecast" class="btn btn--ghost" id="jumpToPredict">Predict consumption</a>
+    </div>
+
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--blue">
+          <svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Today's Energy Consumption</span>
+          <span class="kpi-value" id="kpiToday">—</span>
+          <span class="kpi-sub" id="kpiTodaySub">loading…</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--amber">
+          <svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Tomorrow's Predicted Consumption</span>
+          <span class="kpi-value" id="kpiTomorrow">—</span>
+          <span class="kpi-sub" id="kpiTomorrowSub">loading…</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--red">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Peak Load Time</span>
+          <span class="kpi-value" id="kpiPeak">18:00–21:00</span>
+          <span class="kpi-sub">Evening demand window</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--teal">
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-label">Average Daily Consumption</span>
+          <span class="kpi-value" id="kpiAvg">—</span>
+          <span class="kpi-sub">Panel-wide average</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FORECAST ===================== -->
+  <section class="section" id="forecast">
+    <div class="section__head">
+      <h2>Tomorrow's Energy Forecast</h2>
+      <p>How much energy is expected to be consumed tomorrow — based on the last 14 days plus a 7-day-ahead model forecast.</p>
+    </div>
+
+    <div class="forecast-hero">
+      <div class="forecast-hero__callout">
+        <span class="callout-label" id="forecastDateLabel">Tomorrow</span>
+        <span class="callout-value" id="forecastBigNumber">— kWh</span>
+        <span class="callout-range" id="forecastRange">expected consumption</span>
+      </div>
+      <div class="forecast-hero__chart card">
+        <div class="card__head">
+          <span>Historical → Forecast</span>
+          <select id="fcHouseholdSelect" class="select-mini"><option value="__aggregate__">All households (avg)</option></select>
+        </div>
+        <canvas id="forecastChart" height="230"></canvas>
+        <div class="legend">
+          <span><i class="dot dot--actual"></i>Actual</span>
+          <span><i class="dot dot--pred"></i>Predicted</span>
+          <span><i class="dot dot--band"></i>Confidence range</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card__head"><span>Actual vs. Predicted Load</span></div>
+      <canvas id="avpChart" height="220"></canvas>
+      <div class="legend">
+        <span><i class="dot dot--actual"></i>Actual</span>
+        <span><i class="dot dot--pred"></i>Predicted</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card__head"><span>Weather vs. Energy Consumption</span></div>
+      <canvas id="weatherChart" height="200"></canvas>
+      <p class="fine-print" id="weatherNote">Colder days tend to draw more energy — consistent with heating-driven demand.</p>
+    </div>
+
+    <!-- ============= PREDICTION TOOL ============= -->
+    <div class="predict-block" id="predictBlock">
+      <div class="section__head">
+        <h2>Predict Energy Consumption</h2>
+        <p>Enter conditions for a household-day and get a live prediction from the trained forecasting model.</p>
+      </div>
+
+      <form id="predictForm" class="predict-form card">
+        <div class="form-row">
+          <div class="field">
+            <label for="f_household">Household ID</label>
+            <input type="text" id="f_household" placeholder="e.g. MAC000153" value="MAC000153">
+          </div>
+          <div class="field">
+            <label for="f_date">Date</label>
+            <input type="date" id="f_date" required>
+          </div>
+          <div class="field field--checkbox">
+            <label for="f_holiday"><input type="checkbox" id="f_holiday"> Public holiday</label>
+          </div>
+        </div>
+        <p class="derived-readout" id="calendarReadout"></p>
+
+        <details class="advanced-fields">
+          <summary>Weather & recent history <span class="chev">▾</span></summary>
+          <div class="field-grid">
+            <div class="field"><label for="f_tmax">Temp max (°C)</label><input type="number" step="0.1" id="f_tmax" value="14"></div>
+            <div class="field"><label for="f_tmin">Temp min (°C)</label><input type="number" step="0.1" id="f_tmin" value="7"></div>
+            <div class="field"><label for="f_thigh">Temp high (°C)</label><input type="number" step="0.1" id="f_thigh" value="15"></div>
+            <div class="field"><label for="f_tlow">Temp low (°C)</label><input type="number" step="0.1" id="f_tlow" value="6"></div>
+            <div class="field"><label for="f_humidity">Humidity (0–1)</label><input type="number" step="0.01" min="0" max="1" id="f_humidity" value="0.78"></div>
+            <div class="field"><label for="f_wind">Wind speed</label><input type="number" step="0.1" id="f_wind" value="4.2"></div>
+            <div class="field"><label for="f_windb">Wind bearing (°)</label><input type="number" step="1" id="f_windb" value="210"></div>
+            <div class="field"><label for="f_pressure">Pressure (hPa)</label><input type="number" step="0.1" id="f_pressure" value="1015"></div>
+            <div class="field"><label for="f_cloud">Cloud cover (0–1)</label><input type="number" step="0.01" min="0" max="1" id="f_cloud" value="0.6"></div>
+            <div class="field"><label for="f_visibility">Visibility (km)</label><input type="number" step="0.1" id="f_visibility" value="9.5"></div>
+            <div class="field"><label for="f_uv">UV index</label><input type="number" step="1" id="f_uv" value="2"></div>
+            <div class="field"><label for="f_moon">Moon phase (0–1)</label><input type="number" step="0.01" min="0" max="1" id="f_moon" value="0.5"></div>
+            <div class="field"><label for="f_dew">Dew point (°C)</label><input type="number" step="0.1" id="f_dew" value="9.5"></div>
+            <div class="field"><label for="f_lag1">Yesterday (Lag 1, kWh)</label><input type="number" step="0.01" id="f_lag1" value="10.2"></div>
+            <div class="field"><label for="f_lag7">7 days ago (kWh)</label><input type="number" step="0.01" id="f_lag7" value="9.8"></div>
+            <div class="field"><label for="f_lag30">30 days ago (kWh)</label><input type="number" step="0.01" id="f_lag30" value="10.0"></div>
+            <div class="field"><label for="f_roll3">Rolling mean, 3d</label><input type="number" step="0.01" id="f_roll3" value="10.0"></div>
+            <div class="field"><label for="f_roll7">Rolling mean, 7d</label><input type="number" step="0.01" id="f_roll7" value="9.9"></div>
+            <div class="field"><label for="f_rollstd7">Rolling std, 7d</label><input type="number" step="0.01" id="f_rollstd7" value="1.8"></div>
+            <div class="field">
+              <label for="f_tariff">Tariff</label>
+              <select id="f_tariff"><option value="0">Standard</option><option value="1">Time-of-Use</option></select>
+            </div>
+            <div class="field">
+              <label for="f_acorn">Acorn group</label>
+              <select id="f_acorn">
+                {% for g in acorn_groups %}<option value="{{ g }}" {% if g == 'Affluent' %}selected{% endif %}>{{ g }}</option>{% endfor %}
+              </select>
+            </div>
+          </div>
+          <button type="button" id="randomizeBtn" class="btn btn--ghost btn--small">Randomize weather</button>
+        </details>
+
+        <button type="submit" class="btn btn--primary btn--wide">Predict Energy Consumption</button>
+      </form>
+
+      <div class="predict-result card" id="predictResult">
+        <span class="predict-result__value" id="resultValue">— kWh</span>
+        <span class="predict-result__label" id="resultLabel">Fill in the form and predict to see a result here.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== USAGE PATTERNS ===================== -->
+  <section class="section" id="patterns">
+    <div class="section__head">
+      <h2>Understand Your Energy Usage</h2>
+      <p>Patterns in when and how energy is consumed across the panel.</p>
+    </div>
+
+    <div class="pattern-grid">
+      <div class="card">
+        <div class="card__head"><span>Hourly Consumption Pattern</span></div>
+        <canvas id="hourlyChart" height="200"></canvas>
+        <div class="pattern-callouts">
+          <div><strong>Peak Usage</strong><span id="peakUsageLabel">18:00–21:00</span></div>
+          <div><strong>Lowest Usage</strong><span id="lowUsageLabel">02:00–05:00</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__head"><span>Weekday vs. Weekend</span></div>
+        <canvas id="weekdayChart" height="200"></canvas>
+        <p class="fine-print" id="weekdayNote">Loading…</p>
+      </div>
+
+      <div class="card">
+        <div class="card__head"><span>Peak vs. Off-Peak</span></div>
+        <canvas id="peakDonut" height="200"></canvas>
+        <div class="legend">
+          <span><i class="dot dot--amber"></i>Peak (18:00–21:00)</span>
+          <span><i class="dot dot--blue"></i>Off-peak</span>
+        </div>
+      </div>
+
+      <div class="card card--wide">
+        <div class="card__head"><span>Monthly Consumption Trend</span></div>
+        <canvas id="monthlyChart" height="180"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOUSEHOLD SEGMENTS ===================== -->
+  <section class="section" id="segments">
+    <div class="section__head">
+      <h2>Household Energy Segments</h2>
+      <p>Behavioral clusters discovered in the panel — households don't all use energy the same way.</p>
+    </div>
+
+    <div class="segments-layout">
+      <div class="card">
+        <div class="card__head"><span>Household Distribution</span></div>
+        <canvas id="segmentDonut" height="230"></canvas>
+      </div>
+      <div class="segments-cards" id="segmentsCards"><!-- filled by JS --></div>
+    </div>
+  </section>
+
+  <!-- ===================== OPTIMIZATION INSIGHTS ===================== -->
+  <section class="section" id="insights">
+    <div class="section__head">
+      <h2>AI Energy Optimization Insights</h2>
+      <p>Practical, data-driven recommendations for smarter energy management.</p>
+    </div>
+    <div class="insights-grid" id="insightsGrid"><!-- filled by JS --></div>
+  </section>
+
+  <!-- ===================== MODEL DETAILS (collapsed, low-key) ===================== -->
+  <section class="section model-details" id="modelDetails" hidden>
+    <div class="section__head">
+      <h2>Model Details</h2>
+      <p>Technical detail, for reference — not the main story of this dashboard.</p>
+    </div>
+    <div class="card">
+      <div id="modelDetailsBody">Loading…</div>
+    </div>
+  </section>
+
+  <footer class="site-footer">Autonomous Energy Optimization Platform for Smart Grids</footer>
+</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
